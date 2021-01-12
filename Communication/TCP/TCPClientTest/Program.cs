@@ -1,4 +1,10 @@
-﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
 using TCPConnector;
 
 namespace TCPClientTest
@@ -9,6 +15,8 @@ namespace TCPClientTest
         {
             var client = new TCPClient();
             Console.WriteLine();
+            var l = client.DnsLookup();
+            return;
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -20,7 +21,17 @@ namespace TCPConnector
             // If a host has multiple addresses, you will get a list of addresses  
             var host = Dns.GetHostEntry(defaultHost);
             var ipAddress = host.AddressList[0];
-            remoteEP = new IPEndPoint(ipAddress, 11000);
+            remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 18444);
+        }
+
+        /// <summary>
+        /// Perform DNS lookup for given dns name or ip address
+        /// </summary>
+        /// <param name="dns">DNS name or ip address</param>
+        /// <returns></returns>
+        public IEnumerable<IPAddress> DnsLookup(string dns= "seed.bitcoinstats.com")
+        {
+            return Dns.GetHostEntry(dns).AddressList.Where(adr => adr.AddressFamily == AddressFamily.InterNetwork);
         }
 
         private void CreateSocket()

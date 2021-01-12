@@ -13,11 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UDPClient", "Communication\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UDPServer", "Communication\UDP\UDPServer\UDPServer.csproj", "{69499E3C-7C8E-42C5-866C-3492C2CAEABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPConnector", "Communication\TCP\TCPConnector\TCPConnector.csproj", "{2694ACBA-FEFF-4AB7-A8B2-5D04BA007AEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPConnector", "Communication\TCP\TCPConnector\TCPConnector.csproj", "{2694ACBA-FEFF-4AB7-A8B2-5D04BA007AEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPClientTest", "Communication\TCP\TCPClientTest\TCPClientTest.csproj", "{6215B756-E9D5-43D3-B607-F4ADDEF66785}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPServerTest", "Communication\TCP\TCPServerTest\TCPServerTest.csproj", "{B3D64B42-FF43-4C49-93D1-BF3E8EE3A957}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitcoinExplorer.CLI", "BitcoinExplorer.CLI\BitcoinExplorer.CLI.csproj", "{94BE111A-4B53-4C70-874B-302A5F5EBBD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinExplorer.Core", "BitcoinExplorer.Core\BitcoinExplorer.Core.csproj", "{A33C1947-741D-417F-8179-3DE4D8F20D15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{B3D64B42-FF43-4C49-93D1-BF3E8EE3A957}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3D64B42-FF43-4C49-93D1-BF3E8EE3A957}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3D64B42-FF43-4C49-93D1-BF3E8EE3A957}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94BE111A-4B53-4C70-874B-302A5F5EBBD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94BE111A-4B53-4C70-874B-302A5F5EBBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94BE111A-4B53-4C70-874B-302A5F5EBBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94BE111A-4B53-4C70-874B-302A5F5EBBD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A33C1947-741D-417F-8179-3DE4D8F20D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A33C1947-741D-417F-8179-3DE4D8F20D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A33C1947-741D-417F-8179-3DE4D8F20D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A33C1947-741D-417F-8179-3DE4D8F20D15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
