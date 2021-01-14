@@ -39,14 +39,20 @@ namespace BitcoinExplorer.Core.Structs.Net
 		public Int32 start_height;
 		public bool relay;
 
-		protected Version()
-		{
-		}
+		//public Version() test
+  //      {
 
-		public Version(Byte[] b)
+  //      }
+        protected Version()
+        {
+
+        }
+
+        public Version(Byte[] b)
 		{
 			using (MemoryStream ms = new MemoryStream(b))
-				Read(ms);
+			Read(ms);
+           
 		}
 
 		public void Read(Stream s)
@@ -89,7 +95,24 @@ namespace BitcoinExplorer.Core.Structs.Net
 			bw.Write((UInt64)nonce);
 			user_agent.Write(s);
 			bw.Write((Int32)start_height);
+
+
+			Console.WriteLine("\n You want more info about connection press on keyword: 'i' ");
+			string x = Console.ReadLine();
+			if (x.Contains("i"))
+			{
+				Console.WriteLine("\n More about  Communication :");
+                Console.WriteLine("Addres Recv: {0}",addr_recv.address.ToString().Split(':').Last());
+                Console.WriteLine("Addres From: {0}",addr_from.address.ToString().Split(':').Last());
+				Console.WriteLine("Version: {0}", version);
+				Console.WriteLine("Service: {0}", services);
+				Console.WriteLine("Timestamp: {0}", timestamp);
+				Console.WriteLine("User agent: {0}", user_agent);
+				Console.WriteLine("Start height: {0}", start_height);
+				Console.WriteLine("Nonce: {0}", nonce);
+			}
 		}
+
 
 		public byte[] ToBytes()
 		{

@@ -29,7 +29,11 @@ namespace BitcoinExplorer.Core.Structs.Net
 			this.services = services;
 			this.address = address;
 			this.port = port;
-
+            Console.WriteLine("###############################");
+            Console.WriteLine(" \n Communication: " +
+								"\n Name of Services: " + services+ 
+								"\n Adress: " + address +
+								 "\n Port: " + port);
 			if (address.GetAddressBytes().Length != 16)
 				this.address = new IPAddress((new Byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF })
 					.Concat(address.GetAddressBytes()).ToArray());
