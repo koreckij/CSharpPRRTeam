@@ -52,8 +52,8 @@ namespace BitcoinExplorer.Core
                 NetworkStream ns = client.GetStream();
                 var localAddr = new NetAddr(Services.NODE_NETWORK, ((IPEndPoint)client.Client.LocalEndPoint).Address, (UInt16)((IPEndPoint)client.Client.LocalEndPoint).Port);
                 var remoteAddr = new NetAddr(Services.NODE_NETWORK, ((IPEndPoint)client.Client.RemoteEndPoint).Address, (UInt16)((IPEndPoint)client.Client.RemoteEndPoint).Port);
-                Console.WriteLine($"Successfully connected to node {remoteAddr.address.ToString().Split(':').Last()}:{remoteAddr.port}");
-                new Message("version", Version.Default(remoteAddr, localAddr, 0),useTestnet).Write(ns);
+                new Message("version", Version.Default(remoteAddr, localAddr, 0), useTestnet).Write(ns);
+                Console.WriteLine($"\nSuccessfully connected to node {remoteAddr.address.ToString().Split(':').Last()}:{remoteAddr.port}");            
                 logger.LogHeader("Version message send");
                 while (true)
                 {
