@@ -1,4 +1,4 @@
-﻿using BitcoinExplorer.Core;
+using BitcoinExplorer.Core;
 using BitcoinExplorer.Core.Structs.Net;
 using CommandLine;
 using System;
@@ -19,6 +19,7 @@ namespace BitcoinExplorer.CLI
             Explorer.Explore();
             var explorer = new Explorer(Explorer.Explore().First(),8333);
             explorer.Handshake();
+            explorer.GetAddr();
         }
 
     }

@@ -1,4 +1,4 @@
-﻿using BitcoinExplorer.Core.Logger;
+using BitcoinExplorer.Core.Logger;
 using BitcoinExplorer.Core.Structs.Net;
 using System;
 using System.Collections.Generic;
@@ -20,6 +20,8 @@ namespace BitcoinExplorer.Core
         private readonly TcpClient client;
         private bool useTestnet;
         private static readonly ILogger logger = new SimpleConsoleLogger();
+
+        private Message version;
 
         public Explorer(string ipv4 = LocalTestnetPeer, int port = LocalTestnetPort)
         {
@@ -62,15 +64,15 @@ namespace BitcoinExplorer.Core
                     {
                         case "version":
                             {
+                                version = msg;
                                 logger.LogHeader("Version message received");
-                                // TODO: Decode and print version 
-                                new Message("verack", new VerAck(), useTestnet);
-                                logger.LogHeader("Verack message send");
+                                logger.Log(msg.ToString());
                             }
                             break;
                         case "verack":
                             {
                                 logger.LogHeader("Verack message received");
+                                new Message("verack", new VerAck(), useTestnet).Write(ns);
                                 // TODO: Decode and print verack 
                                 logger.LogHeader("Handshake ended successfully");
                             }
@@ -79,6 +81,79 @@ namespace BitcoinExplorer.Core
                             {
                                 logger.LogHeader("Alert message received");
                                 // TODO: Decode and print alert 
+                            }
+                            break;
+                        default:
+                            throw new Exception("Received not excepted message during handshake");
+                    }
+                }
+            }
+            catch (EndOfStreamException ex)
+            {
+                logger.LogHeader("End message received");
+                return;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error during handshake: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Asking connected node for known addresses
+        /// </summary>
+        public void GetAddr()
+        {
+            try
+            {
+                NetworkStream ns = client.GetStream();
+                new Message("getaddr", new GetAddr(), useTestnet).Write(ns);
+                logger.LogHeader("Getaddr message send");
+                while (true)
+                {
+                    Message msg = Message.FromStream(ns);
+                    switch (msg.strcmd)
+                    {
+                        case "getaddr":
+                            {
+                                version = msg;
+                                logger.LogHeader("Version message received");
+                                logger.Log(msg.ToString());
+                                logger.LogHeader("Verack message send");
+                            }
+                            break;
+                        case "addr":
+                            {
+                                version = msg;
+                                logger.LogHeader("Version message received");
+                                logger.Log(msg.ToString());
+                                logger.LogHeader("Verack message send");
+                            }
+                            break;
+                        case "alert":
+                            {
+                                logger.LogHeader("Alert message received");
+                                // TODO: Decode and print alert 
+                            }
+                            break;
+                        case "sendheaders":
+                            {
+                                logger.LogHeader("Sendheaders message received");
+                                // TODO: Decode and print alert 
+                            }
+                            break;
+                        case "sendcmpct":
+                            {
+                                logger.LogHeader("Sendcmpct message received");
+                                // TODO: TO implement
+                            }
+                            break;
+                        case "ping":
+                            {
+                                logger.LogHeader("Ping message received");
+                                new Message("pong", new Pong(((Ping)msg.payload).nonce), useTestnet);
+                                logger.LogHeader("Pong message send");
+                                //new Message("getaddr", new GetAddr(), useTestnet).Write(ns);
                             }
                             break;
                         default:

@@ -17,7 +17,7 @@ namespace BitcoinExplorer.Core.Structs.Net
 				Assembly.GetExecutingAssembly().GetName().Version.ToString() + "/";
 
 			Version v = new Version();
-			v.version = 70015;
+			v.version = 70012;
 			v.services = Services.NODE_NETWORK;
 			v.timestamp = UnixTimestamp.Now;
 			v.addr_recv = addr_recv;
@@ -76,6 +76,23 @@ namespace BitcoinExplorer.Core.Structs.Net
 			start_height = br.ReadInt32();
 			if (version >= 70001)
 				relay = br.ReadBoolean();
+		}
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("version : {");
+			sb.AppendLine($"version : {version}");
+			sb.AppendLine($"services : {services}");
+			sb.AppendLine($"time : {UnixTimestamp.GetTime(timestamp)}");
+			sb.AppendLine($"address message received : {addr_recv.ToString()}");
+			sb.AppendLine($"address message emitted : {addr_from.ToString()}");
+			sb.AppendLine($"random nonce : {nonce}");
+			sb.AppendLine($"user agent : {user_agent.ToString()}");
+			sb.AppendLine($"last block received : {start_height}");
+			sb.AppendLine($"announce relayed transactions : {relay}");
+			sb.AppendLine("}");
+			return sb.ToString();
 		}
 
 		public void Write(Stream s)

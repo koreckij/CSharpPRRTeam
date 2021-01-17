@@ -98,6 +98,18 @@ namespace BitcoinExplorer.Core.Structs.Net
             }
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("header : {");
+            sb.AppendLine($"magic value : {magic}"); //TO DO: ADD COMMENT ABOUT NETWORK TYPE
+            sb.AppendLine($"command : {strcmd}");
+            sb.AppendLine($"checksum : {HashHelper.Bytes2String(checksum)}");
+            sb.AppendLine($"payload : {payload.ToString()}");
+            sb.AppendLine("}");
+            return sb.ToString();
+        }
+
         public void Write(Stream s)
         {
             BinaryWriter bw = new BinaryWriter(s);

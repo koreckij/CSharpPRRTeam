@@ -52,6 +52,16 @@ namespace BitcoinExplorer.Core.Structs.Net
 			port = br.ReadUInt16();
 		}
 
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("network address : {");
+			sb.AppendLine($"services : {services}");
+			sb.AppendLine($"address : {address.ToString().Split(':').Last()}:{port}");
+			sb.AppendLine("}");
+			return sb.ToString();
+		}
+
 		public void Write(Stream s)
 		{
 			BinaryWriter bw = new BinaryWriter(s);
