@@ -66,6 +66,15 @@ namespace BitcoinExplorer.Core.Structs.Net
 				return ms.ToArray();
 			}
 		}
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+			sb.AppendLine("alert : {");
+			sb.AppendLine($"payload : {payload}");
+			sb.AppendLine($"signature : {signature}");
+			sb.Append("}");
+			return sb.ToString();
+		}
 
 		public static Alert FromStream(Stream s)
 		{

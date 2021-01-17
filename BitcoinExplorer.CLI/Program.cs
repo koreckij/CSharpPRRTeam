@@ -17,7 +17,7 @@ namespace BitcoinExplorer.CLI
         static void Main(string[] args)
         {
             Explorer.Explore();
-            var explorer = new Explorer(Explorer.Explore().First(),8333);
+            var explorer = new Explorer(Explorer.Explore().Last(), 8333);
             explorer.Handshake();
             explorer.GetAddr();
         }

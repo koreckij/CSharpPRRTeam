@@ -22,12 +22,15 @@ namespace BitcoinExplorer.Core
         private static readonly ILogger logger = new SimpleConsoleLogger();
 
         private Message version;
+        private Queue<Message> messagesReceived;
 
         public Explorer(string ipv4 = LocalTestnetPeer, int port = LocalTestnetPort)
         {
             client = new TcpClient(ipv4, port);
             if (port != 8333)
                 useTestnet = true;
+
+            messagesReceived = new Queue<Message>();
         }
 
         /// <summary>
@@ -55,20 +58,13 @@ namespace BitcoinExplorer.Core
                 var localAddr = new NetAddr(Services.NODE_NETWORK, ((IPEndPoint)client.Client.LocalEndPoint).Address, (UInt16)((IPEndPoint)client.Client.LocalEndPoint).Port);
                 var remoteAddr = new NetAddr(Services.NODE_NETWORK, ((IPEndPoint)client.Client.RemoteEndPoint).Address, (UInt16)((IPEndPoint)client.Client.RemoteEndPoint).Port);
                 Console.WriteLine($"Successfully connected to node {remoteAddr.address.ToString().Split(':').Last()}:{remoteAddr.port}");
-                new Message("version", Version.Default(remoteAddr, localAddr, 0),useTestnet).Write(ns);
+                new Message("version", Version.Default(remoteAddr, localAddr, 0), useTestnet).Write(ns);
                 logger.LogHeader("Version message send");
                 while (true)
                 {
                     Message msg = Message.FromStream(ns);
                     switch (msg.strcmd)
                     {
-                        case "version":
-                            {
-                                version = msg;
-                                logger.LogHeader("Version message received");
-                                logger.Log(msg.ToString());
-                            }
-                            break;
                         case "verack":
                             {
                                 logger.LogHeader("Verack message received");
@@ -77,14 +73,9 @@ namespace BitcoinExplorer.Core
                                 logger.LogHeader("Handshake ended successfully");
                             }
                             return;
-                        case "alert":
-                            {
-                                logger.LogHeader("Alert message received");
-                                // TODO: Decode and print alert 
-                            }
-                            break;
                         default:
-                            throw new Exception("Received not excepted message during handshake");
+                            ServiceAll(ns, msg);
+                            break;
                     }
                 }
             }
@@ -112,53 +103,7 @@ namespace BitcoinExplorer.Core
                 while (true)
                 {
                     Message msg = Message.FromStream(ns);
-                    switch (msg.strcmd)
-                    {
-                        case "getaddr":
-                            {
-                                version = msg;
-                                logger.LogHeader("Version message received");
-                                logger.Log(msg.ToString());
-                                logger.LogHeader("Verack message send");
-                            }
-                            break;
-                        case "addr":
-                            {
-                                version = msg;
-                                logger.LogHeader("Version message received");
-                                logger.Log(msg.ToString());
-                                logger.LogHeader("Verack message send");
-                            }
-                            break;
-                        case "alert":
-                            {
-                                logger.LogHeader("Alert message received");
-                                // TODO: Decode and print alert 
-                            }
-                            break;
-                        case "sendheaders":
-                            {
-                                logger.LogHeader("Sendheaders message received");
-                                // TODO: Decode and print alert 
-                            }
-                            break;
-                        case "sendcmpct":
-                            {
-                                logger.LogHeader("Sendcmpct message received");
-                                // TODO: TO implement
-                            }
-                            break;
-                        case "ping":
-                            {
-                                logger.LogHeader("Ping message received");
-                                new Message("pong", new Pong(((Ping)msg.payload).nonce), useTestnet);
-                                logger.LogHeader("Pong message send");
-                                //new Message("getaddr", new GetAddr(), useTestnet).Write(ns);
-                            }
-                            break;
-                        default:
-                            throw new Exception("Received not excepted message during handshake");
-                    }
+                    ServiceAll(ns, msg);
                 }
             }
             catch (EndOfStreamException ex)
@@ -169,6 +114,77 @@ namespace BitcoinExplorer.Core
             catch (Exception ex)
             {
                 logger.LogError($"Error during handshake: {ex.Message}");
+            }
+        }
+
+        private void ServiceAll(NetworkStream ns, Message msg)
+        {
+            switch (msg.strcmd)
+            {
+                case "version":
+                    {
+                        version = msg;
+                        logger.LogHeader("Version message received");
+                        logger.Log(msg.ToString());
+                    }
+                    break;
+                case "verack":
+                    {
+                        logger.LogHeader("Verack message received");
+                        new Message("verack", new VerAck(), useTestnet).Write(ns);
+                        // TODO: Decode and print verack 
+                        logger.LogHeader("Handshake ended successfully");
+                    }
+                    break;
+                case "alert":
+                    {
+                        logger.LogHeader("Alert message received");
+                        logger.Log(msg.ToString());
+                        // TO DO: Add message deserialization
+                    }
+                    break;
+                case "getaddr":
+                    {
+                        logger.LogHeader("Getaddr message received");
+                    }
+                    break;
+                case "addr":
+                    {
+                        logger.LogHeader("Addr message received");
+                        logger.Log(msg.ToString());
+                    }
+                    break;
+                case "sendheaders":
+                    {
+                        logger.LogHeader("Sendheaders message received");
+                        // TODO: Decode and print alert 
+                    }
+                    break;
+                case "sendcmpct":
+                    {
+                        logger.LogHeader("Sendcmpct message received");
+                        // TODO: TO implement
+                    }
+                    break;
+                case "ping":
+                    {
+                        logger.LogHeader("Ping message received");
+                        new Message("pong", new Pong(((Ping)msg.payload).nonce), useTestnet);
+                        logger.LogHeader("Pong message send");
+                    }
+                    break;
+                case "inv":
+                    {
+                        logger.LogHeader("Inv message received");
+                    }
+                    break;
+                case "getheaders":
+                    {
+                        logger.LogHeader("Getheaders message received");
+                    }
+                    break;
+                default:
+                    throw new Exception($"Received not excepted message {msg.strcmd}");
             }
         }
     }

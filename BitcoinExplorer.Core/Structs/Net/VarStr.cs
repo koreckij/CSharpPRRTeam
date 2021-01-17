@@ -69,7 +69,7 @@ namespace BitcoinExplorer.Core.Structs.Net
 
 		public override string ToString()
 		{
-			return Encoding.ASCII.GetString(str);
+			return Encoding.UTF8.GetString(str);
 		}
 	}
 }
